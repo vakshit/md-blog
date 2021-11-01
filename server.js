@@ -38,6 +38,10 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+const loading = (req, res,next) => {
+  res.render('loading')
+  next()
+}
 app.get("/articles", async (req, res) => {
   if (req.isAuthenticated()) {
     var articles = [];
@@ -52,12 +56,13 @@ app.get("/articles", async (req, res) => {
       url.format({
         pathname: "/login",
         query: {
-          redirect: "/",
+          redirect: req.originalUrl,
         },
       })
     );
   }
 });
+
 
 app.get("/", (req, res) => {
   const redirectUrl = req.query.redirect ? req.query.redirect : "/articles";
@@ -103,10 +108,7 @@ app.post("/login", (req, res) => {
       // res.send("Error Logging In please try again");
       res.json(err);
     } else {
-      passport.authenticate("local")(req, res, (err, user, info) => {
-        console.log(err);
-        console.log(user);
-        console.log(info);
+      passport.authenticate("local")(req, res, () => {
         res.redirect(redirectUrl);
       });
     }

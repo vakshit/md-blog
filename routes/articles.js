@@ -90,7 +90,6 @@ router.post("/save", async (req, res) => {
     markdown: req.body.markdown,
     sanitizedHtml: dompurify.sanitize(marked(req.body.markdown)),
   });
-  console.log(article);
   try {
     savedArticle = await article.save();
     res.redirect(`/articles/${req.user.username}/${savedArticle.id}`);
