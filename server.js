@@ -39,7 +39,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.get("/articles", async (req, res) => {
-  console.log(req.user.password);
   if (req.isAuthenticated()) {
     var articles = [];
     Articles.find({}, (err, articleList) => {
